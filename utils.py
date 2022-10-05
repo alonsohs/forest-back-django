@@ -6,6 +6,9 @@ def get_auth_token(request):
     token = request.COOKIES.get('jwt')
 
     if not token:
+        token = request.headers['Authorization'].split(' ')[1]
+
+    if not token:
         raise AuthenticationFailed('Unauthenticated')
 
     try:

@@ -40,9 +40,9 @@ class LoginView(APIView):
 
         response = Response()
 
-        response.set_cookie(key='jwt', value=token, httponly=True)
+        response.set_cookie(key='jwt', value=token)
         response.data = {
-            'jwt': token
+            'token': token
         }
         return response
 
@@ -52,9 +52,13 @@ class UserView(APIView):
     def get(self, request):
         payload = get_auth_token(request)
 
+
         user = User.objects.filter(id=payload['id']).first()
         serializer = UserSerializer(user)
-        return Response(serializer.data)
+        response = {
+            'user': serializer.data
+        }
+        return Response(response)
 
 
 class LogoutView(APIView):
